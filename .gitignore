@@ -1,0 +1,13 @@
+# Ignore Terraform binary folder
+.terraform/
+.terraform.lock.hcl
+
+# Ignore State files (They contain sensitive data)
+*.tfstate
+*.tfstate.backup
+
+# Ignore Secret Keys (CRITICAL SECURITY)
+*.pem
+
+# Ignore System files
+.DS_Store
