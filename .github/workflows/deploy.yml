@@ -40,7 +40,7 @@ jobs:
       run: |
         docker push ${{ secrets.DOCKER_USERNAME }}/devops-capstone:latest
 
-    # 6. Deploy to AWS Server via SSH
+  # 6. Deploy to AWS Server via SSH
     - name: Deploy to Server
       uses: appleboy/ssh-action@master
       with:
@@ -48,18 +48,10 @@ jobs:
         username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          # Install Docker if not present (Safety Check)
-          if ! command -v docker &> /dev/null; then
-              sudo apt-get update
-              sudo apt-get install -y docker.io
-          fi
-          
-          # Stop old container
+          # We use 'sudo' just to be safe with permissions
           sudo docker stop my-website || true
           sudo docker rm my-website || true
           
-          # Pull new image
+          # Pull the new image and run it
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/devops-capstone:latest
-          
-          # Run new container
           sudo docker run -d --name my-website -p 80:80 ${{ secrets.DOCKER_USERNAME }}/devops-capstone:latest
